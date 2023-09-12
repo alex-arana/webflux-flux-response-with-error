@@ -10,22 +10,26 @@ plugins {
     id("org.springframework.boot")
 }
 
+val armeriaVersion: String by extra
+val nettyVersion: String by extra
 val kotestJUnitVersion: String by extra
 val kotestSpringVersion: String by extra
+val reactorKotlinExtensionsVersion: String by extra
+val springBootVersion: String by extra
 
 repositories {
     mavenCentral()
 }
 
 dependencies {
-    implementation(platform(SpringBootPlugin.BOM_COORDINATES))
-    implementation("org.springframework.boot:spring-boot-starter")
-    implementation("org.springframework.boot:spring-boot-starter-webflux")
-    implementation("io.projectreactor.kotlin:reactor-kotlin-extensions")
+    implementation(platform("com.linecorp.armeria:armeria-bom:$armeriaVersion"))
+    implementation(platform("io.netty:netty-bom:$nettyVersion"))
+    implementation("com.linecorp.armeria:armeria-spring-boot3-webflux-starter")
+    implementation("io.projectreactor.kotlin:reactor-kotlin-extensions:$reactorKotlinExtensionsVersion")
 
     testImplementation("io.kotest:kotest-runner-junit5:$kotestJUnitVersion")
     testImplementation("io.kotest.extensions:kotest-extensions-spring:$kotestSpringVersion")
-    testImplementation("org.springframework.boot:spring-boot-starter-test")
+    testImplementation("org.springframework.boot:spring-boot-starter-test:$springBootVersion")
 }
 
 tasks {
