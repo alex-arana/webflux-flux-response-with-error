@@ -29,6 +29,7 @@ internal class DataControllerTest(private val webTestClient: WebTestClient) : Ex
         expect("should return HTTP 200 when requesting Data") {
             webTestClient.get()
                 .uri("/data")
+                .accept(MediaType.APPLICATION_JSON)
                 .exchange()
                 .expectStatus()
                 .isOk
@@ -46,6 +47,7 @@ internal class DataControllerTest(private val webTestClient: WebTestClient) : Ex
         expect("should return HTTP 400 when requesting Data with error") {
             webTestClient.get()
                 .uri("/data-error")
+                .accept(MediaType.APPLICATION_JSON)
                 .exchange()
                 .expectStatus()
                 .isBadRequest
