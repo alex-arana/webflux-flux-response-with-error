@@ -2,7 +2,6 @@ import org.gradle.api.tasks.testing.logging.TestLogEvent
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.dsl.KotlinVersion
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
-import org.springframework.boot.gradle.plugin.SpringBootPlugin
 
 plugins {
     kotlin("jvm")
@@ -10,22 +9,22 @@ plugins {
     id("org.springframework.boot")
 }
 
-val kotestJUnitVersion: String by extra
-val kotestSpringVersion: String by extra
+val armeriaVersion: String by extra
+val nettyVersion: String by extra
+val reactorKotlinExtensionsVersion: String by extra
+val springBootVersion: String by extra
 
 repositories {
     mavenCentral()
 }
 
 dependencies {
-    implementation(platform(SpringBootPlugin.BOM_COORDINATES))
-    implementation("org.springframework.boot:spring-boot-starter")
-    implementation("org.springframework.boot:spring-boot-starter-webflux")
-    implementation("io.projectreactor.kotlin:reactor-kotlin-extensions")
+    implementation(platform("com.linecorp.armeria:armeria-bom:$armeriaVersion"))
+    implementation(platform("io.netty:netty-bom:$nettyVersion"))
+    implementation("com.linecorp.armeria:armeria-spring-boot2-webflux-starter")
+    implementation("io.projectreactor.kotlin:reactor-kotlin-extensions:$reactorKotlinExtensionsVersion")
 
-    testImplementation("io.kotest:kotest-runner-junit5:$kotestJUnitVersion")
-    testImplementation("io.kotest.extensions:kotest-extensions-spring:$kotestSpringVersion")
-    testImplementation("org.springframework.boot:spring-boot-starter-test")
+    testImplementation("org.springframework.boot:spring-boot-starter-test:$springBootVersion")
 }
 
 tasks {

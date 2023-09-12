@@ -1,16 +1,28 @@
 package com.example
 
-import io.kotest.core.spec.style.ExpectSpec
+import org.junit.jupiter.api.Nested
+import org.junit.jupiter.api.Test
+import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment
 import org.springframework.http.MediaType
 import org.springframework.test.web.reactive.server.WebTestClient
 
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
-internal class DataControllerTest(private val webTestClient: WebTestClient) : ExpectSpec({
+internal class DataControllerTest {
+    @Autowired
+    private lateinit var dataController: DataController
 
-    context("WebFlux Flux Endpoint") {
-        expect("should return HTTP 200 when requesting Strings") {
+    private val webTestClient: WebTestClient by lazy {
+        WebTestClient
+            .bindToController(dataController)
+            .build()
+    }
+
+    @Nested
+    inner class WebFluxFluxEndpoint {
+        @Test
+        fun `should return HTTP 200 when requesting Strings`() {
             webTestClient.get()
                 .uri("/strings")
                 .exchange()
@@ -18,7 +30,8 @@ internal class DataControllerTest(private val webTestClient: WebTestClient) : Ex
                 .isOk
         }
 
-        expect("should return HTTP 400 when requesting Strings with error") {
+        @Test
+        fun `should return HTTP 400 when requesting Strings with error`() {
             webTestClient.get()
                 .uri("/strings-error")
                 .exchange()
@@ -26,7 +39,8 @@ internal class DataControllerTest(private val webTestClient: WebTestClient) : Ex
                 .isBadRequest
         }
 
-        expect("should return HTTP 200 when requesting Data") {
+        @Test
+        fun `should return HTTP 200 when requesting Data`() {
             webTestClient.get()
                 .uri("/data")
                 .exchange()
@@ -34,7 +48,8 @@ internal class DataControllerTest(private val webTestClient: WebTestClient) : Ex
                 .isOk
         }
 
-        expect("should return HTTP 200 when streaming Data") {
+        @Test
+        fun `should return HTTP 200 when streaming Data`() {
             webTestClient.get()
                 .uri("/data")
                 .accept(MediaType.APPLICATION_NDJSON)
@@ -43,7 +58,8 @@ internal class DataControllerTest(private val webTestClient: WebTestClient) : Ex
                 .isOk
         }
 
-        expect("should return HTTP 400 when requesting Data with error") {
+        @Test
+        fun `should return HTTP 400 when requesting Data with error`() {
             webTestClient.get()
                 .uri("/data-error")
                 .exchange()
@@ -51,7 +67,8 @@ internal class DataControllerTest(private val webTestClient: WebTestClient) : Ex
                 .isBadRequest
         }
 
-        expect("should return HTTP 400 when streaming Data with error") {
+        @Test
+        fun `should return HTTP 400 when streaming Data with error`() {
             webTestClient.get()
                 .uri("/data-error")
                 .accept(MediaType.APPLICATION_NDJSON)
@@ -60,7 +77,8 @@ internal class DataControllerTest(private val webTestClient: WebTestClient) : Ex
                 .isBadRequest
         }
 
-        expect("should return HTTP 400 when requesting error") {
+        @Test
+        fun `should return HTTP 400 when requesting error`() {
             webTestClient.get()
                 .uri("/error")
                 .exchange()
@@ -68,4 +86,4 @@ internal class DataControllerTest(private val webTestClient: WebTestClient) : Ex
                 .isBadRequest
         }
     }
-})
+}
